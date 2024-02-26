@@ -4,47 +4,46 @@
  * An implementation of binomial heap over non-negative integers.
  * Based on exercise from previous semester.
  */
-public class BinomialHeap{
+public class BinomialHeap {
 	public int size;
 	public HeapNode last;
 	public HeapNode min;
-	
+
 	public BinomialHeap() {
 		this.size = 0;
 	}
-	
+
 
 	/**
 	 * Inserts a new HeapItem into the heap with the given key and information.
-	 * 
+	 *
 	 * @param key  The key associated with the new HeapItem (must be greater than 0).
 	 * @param info Additional information to be stored in the new HeapItem.
 	 * @return The newly generated HeapItem.
 	 */
 	public HeapItem insert(int key, String info) {
-	    // Create a new HeapNode with the provided key and info
-	    HeapNode nodeInsert = new HeapNode(key, info);
-	    
-	    // Create a new BinomialHeap instance to hold the new node
-	    BinomialHeap heap2 = new BinomialHeap();
-	    
-	    // Set the last and min pointers of heap2 to the new node, and update its size
-	    heap2.last = nodeInsert;
-	    heap2.min = nodeInsert;
-	    heap2.size = 1;
-	    
-	    // Meld the new heap (heap2) with the current heap
-	    this.meld(heap2);
-	    
-	    // Return the newly generated HeapItem
-	    return nodeInsert.item;
+		// Create a new HeapNode with the provided key and info
+		HeapNode nodeInsert = new HeapNode(key, info);
+
+		// Create a new BinomialHeap instance to hold the new node
+		BinomialHeap heap2 = new BinomialHeap();
+
+		// Set the last and min pointers of heap2 to the new node, and update its size
+		heap2.last = nodeInsert;
+		heap2.min = nodeInsert;
+		heap2.size = 1;
+		nodeInsert.next = nodeInsert;
+
+		// Meld the new heap (heap2) with the current heap
+		this.meld(heap2);
+
+		// Return the newly generated HeapItem
+		return nodeInsert.item;
 	}
 
 
 	/**
-	 * 
 	 * Delete the minimal item
-	 *
 	 */
 	public void deleteMin() {
 		return; // should be replaced by student code
@@ -52,92 +51,105 @@ public class BinomialHeap{
 	}
 
 	/**
-	 * 
 	 * Return the minimal HeapItem
-	 *
 	 */
 	public HeapItem findMin() {
 		return this.min.item;
-	} 
+	}
 
 	/**
-	 * 
 	 * pre: 0 < diff < item.key
-	 * 
-	 * Decrease the key of item by diff and fix the heap. 
-	 * 
+	 * <p>
+	 * Decrease the key of item by diff and fix the heap.
 	 */
-	public void decreaseKey(HeapItem item, int diff) 
-	{    
+	public void decreaseKey(HeapItem item, int diff) {
 		return; // should be replaced by student code
 	}
 
 	/**
-	 * 
 	 * Delete the item from the heap.
-	 *
 	 */
-	public void delete(HeapItem item) 
-	{    
+	public void delete(HeapItem item) {
 		return; // should be replaced by student code
 	}
 
 	/**
-	 * 
 	 * Meld the heap with heap2
-	 *TODO - update minimum
-	 *TODO - initate while loop (for shorter heap)
-	 *TODO - CRY 
-	 *TODO - to handle the rest of the longer heap
-	 *TODO - to update the main heap
+	 * TODO - initate while loop (for shorter heap)
+	 * TODO - CRY
+	 * TODO - to handle the rest of the longer heap
+	 * TODO - to update the main heap
 	 */
 	public void meld(BinomialHeap heap2) {
+		this.min = Math.min(this.min.item.key, heap2.min.item.key);
+		this.size = this.size + heap2.size;
 		HeapNode counterHeapOne = this.last.next;
 		HeapNode counterHeapTwo = heap2.last.next;
-		int n = Math.max(this.numTrees(), heap2.numTrees());
-		HeapNode setup = new HeapNode(-1, "");
-		HeapNode point = setup; 
-		HeapNode curr = new HeapNode();
-		for (int i = 0; i < n; i++) {
-			if (counterHeapOne.rank == counterHeapTwo.rank) {
+		Boolean finishedOne = false;
+		Boolean fibishedTwo = false;
+		HeapNode point = new HeapNode(-1, "");
+		HeapNode setup = point;
+		HeapNode curr = null;
+		while (!finishedOne && !fibishedTwo) {
+			if (counterHeapOne.rank == counterHeapTwo.rank && !finishedOne && !fibishedTwo) {
 				if (curr.rank == counterHeapOne.rank) {
-						setup.next = curr;
-					}
+					setup.next = curr;
+					setup = setup.next;
+					curr = null;
+				}
 				curr = this.link(counterHeapOne, counterHeapTwo);
 				counterHeapOne = counterHeapOne.next;
 				counterHeapTwo = counterHeapTwo.next;
-			}
-			else if (counterHeapOne.rank < counterHeapTwo.rank) {
+			} else if ((counterHeapOne.rank < counterHeapTwo.rank && !finishedOne && !fibishedTwo) || (finishedTwo)) {
 				if (curr.rank == counterHeapOne.rank) {
-					curr = this.link(counterHeapOne, curr);					
-				}
-				else {
-					setup.next = curr;
+					curr = this.link(counterHeapOne, curr);
+				} else {
+					if (curr != null) {
+						setup.next = curr;
+						setup = setup.next;
+						curr = null;
+					}
 					setup.next = counterHeapOne;
-					curr = counterHeapTwo;
-					counterHeapTwo = counterHeapTwo.next;
+					setup = setup.next;
 				}
 				counterHeapOne = counterHeapOne.next;
-			}
-			else {
+			} else {
 				if (curr.rank == counterHeapTwo.rank) {
-					curr = this.link(counterHeapTwo, curr);					
-				}
-				else {
+					curr = this.link(counterHeapTwo, curr);
+				} else {
+					if (curr != null) {
 						setup.next = curr;
-						setup.next = counterHeapTwo;
-						curr = counterHeapOne;
-						counterHeapOne = counterHeapOne.next;
+						setup = setup.next;
+						curr = null;
 					}
-					counterHeapTwo = counterHeapTwo.next;
-					
+					setup.next = counterHeapTwo;
+					setup = setup.next;
+				}
+				counterHeapTwo = counterHeapTwo.next;
+
 			}
+			if (counterHeapOne.rank == this.last.next.rank) {
+				finishedOne = true;
+			} else if (counterHeapTwo.rank == heap2.last.next.rank) {
+				fibishedTwo = true;
+			}
+
 		}
-			
+		if (curr != null) {
+			setup.next = curr;
+			setup = setup.next;
 		}
-		
-		return; // should be replaced by student code   		
+		setup.next = point.next;
+		point.next = null;
+		this.last = setup;
+
 	}
+
+
+			
+
+		
+
 	
 	public HeapNode link(HeapNode x, HeapNode y) {
 		if (x.item.key > y.item.key) {
@@ -148,6 +160,7 @@ public class BinomialHeap{
 		}
 		else {
 			y.next = x.child.next;
+			y.parent = x;
 			x.child.next = y;
 		}
 		x.child = y;
@@ -183,6 +196,8 @@ public class BinomialHeap{
 		return 0; // should be replaced by student code
 	}
 
+
+
 	/**
 	 * Class implementing a node in a Binomial Heap.
 	 *  
@@ -200,7 +215,7 @@ public class BinomialHeap{
 			this.next = this;
 		}
 		public HeapNode() {
-			
+			this.rank = -1;
 		}
 
 	}
@@ -227,29 +242,30 @@ public class BinomialHeap{
 			this.node = node;
 		}
 
-		public int getKey() {
-			return this.key;
-		}
-		
-		public String getInfo() {
-			return this.info;
-		}
-		
-		public HeapNode getNode() {
-			return this.node;
-		}
-		
-		public void setKey(int key) {
-			this.key = key;
-		}
-		
-		public void setInfo(String info) {
-			this.info = info;
-		}
-		
-		public void getNode(HeapNode node) {
-			this.node = node;
-		}
+//		public int getKey() {
+//			return this.key;
+//		}
+//
+//		public String getInfo() {
+//			return this.info;
+//		}
+//
+//		public HeapNode getNode() {
+//			return this.node;
+//		}
+//
+//		public void setKey(int key) {
+//			this.key = key;
+//		}
+//
+//		public void setInfo(String info) {
+//			this.info = info;
+//		}
+//
+//		public void getNode(HeapNode node) {
+//			this.node = node;
+//		}
 	}
 
 }
+
