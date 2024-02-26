@@ -1,3 +1,5 @@
+package src;
+
 /**
  * BinomialHeap
  *
@@ -74,99 +76,138 @@ public class BinomialHeap {
 	}
 
 	/**
-	 * Meld the heap with heap2
-	 * TODO - initate while loop (for shorter heap)
-	 * TODO - CRY
-	 * TODO - to handle the rest of the longer heap
-	 * TODO - to update the main heap
+	 * Melds the current heap with another heap.
+	 * 
+	 * @param heap2 The heap to be melded with the current heap.
 	 */
 	public void meld(BinomialHeap heap2) {
-		this.min = Math.min(this.min.item.key, heap2.min.item.key);
-		this.size = this.size + heap2.size;
-		HeapNode counterHeapOne = this.last.next;
-		HeapNode counterHeapTwo = heap2.last.next;
-		Boolean finishedOne = false;
-		Boolean fibishedTwo = false;
-		HeapNode point = new HeapNode(-1, "");
-		HeapNode setup = point;
-		HeapNode curr = null;
-		while (!finishedOne && !fibishedTwo) {
-			if (counterHeapOne.rank == counterHeapTwo.rank && !finishedOne && !fibishedTwo) {
-				if (curr.rank == counterHeapOne.rank) {
-					setup.next = curr;
-					setup = setup.next;
-					curr = null;
-				}
-				curr = this.link(counterHeapOne, counterHeapTwo);
-				counterHeapOne = counterHeapOne.next;
-				counterHeapTwo = counterHeapTwo.next;
-			} else if ((counterHeapOne.rank < counterHeapTwo.rank && !finishedOne && !fibishedTwo) || (finishedTwo)) {
-				if (curr.rank == counterHeapOne.rank) {
-					curr = this.link(counterHeapOne, curr);
-				} else {
-					if (curr != null) {
-						setup.next = curr;
-						setup = setup.next;
-						curr = null;
-					}
-					setup.next = counterHeapOne;
-					setup = setup.next;
-				}
-				counterHeapOne = counterHeapOne.next;
-			} else {
-				if (curr.rank == counterHeapTwo.rank) {
-					curr = this.link(counterHeapTwo, curr);
-				} else {
-					if (curr != null) {
-						setup.next = curr;
-						setup = setup.next;
-						curr = null;
-					}
-					setup.next = counterHeapTwo;
-					setup = setup.next;
-				}
-				counterHeapTwo = counterHeapTwo.next;
+	    // If both heaps are empty, no merging is needed
+	    if (this.size == 0 && heap2.size == 0) {
+	        return;
+	    } else if (this.size == 0) { // If the current heap is empty, assign heap2 to the current heap
+	        this.min = heap2.min;
+	        this.last = heap2.last;
+	        this.size = heap2.size;
+	        return;
+	    } else if (heap2.size == 0) { // If heap2 is empty, no merging is needed
+	        return;
+	    } else {
+	        // Compare the minimum items of both heaps and update the minimum item of the current heap if needed
+	        if (heap2.min.item.key < this.min.item.key) {
+	            this.min = heap2.min;
+	        }
+	        // Update the size of the current heap by adding the size of heap2
+	        this.size = this.size + heap2.size;
+	        // Initialize pointers for iterating through the heaps
+	        HeapNode counterHeapOne = this.last.next;
+	        HeapNode counterHeapTwo = heap2.last.next;
+	        // Flags to track the completion of iteration for each heap
+	        boolean finishedOne = false;
+	        boolean finishedTwo = false;
+	        // Create a dummy node for merging
+	        HeapNode point = new HeapNode(-1, "");
+	        HeapNode setup = point;
+	        HeapNode curr = new HeapNode();
+	        // Iterate through the heaps until all nodes are merged
+	     // Loop until we finish merging nodes from both heaps
+	        while (!finishedOne || !finishedTwo) {
+	            // Merge nodes with the same rank from both heaps
+	            if (counterHeapOne.rank == counterHeapTwo.rank && !finishedOne && !finishedTwo) {
+	                // Check if the current result node already has the same rank
+	                if (curr.rank == counterHeapOne.rank) {
+	                    // Append the current result node to the linked list and move to the next node
+	                    setup.next = curr;
+	                    setup = setup.next;
+	                    curr = new HeapNode(); // Reset the current result node
+	                }
+	                // Link the nodes with the same rank and update the pointers
+	                curr = this.link(counterHeapOne, counterHeapTwo);
+	                counterHeapOne = counterHeapOne.next; // Move to the next node in the first heap
+	                if (counterHeapOne.rank == this.last.next.rank) {
+	                    finishedOne = true; // Mark the first heap as finished if reached the last node
+	                }
+	                counterHeapTwo = counterHeapTwo.next; // Move to the next node in the second heap
+	                if (counterHeapTwo.rank == heap2.last.next.rank) {
+	                    finishedTwo = true; // Mark the second heap as finished if reached the last node
+	                }
+	            } else if ((counterHeapOne.rank < counterHeapTwo.rank && !finishedOne && !finishedTwo) || (finishedTwo)) {
+	                // Merge nodes when the rank of the node from the first heap is lower
+	                if (curr.rank == counterHeapOne.rank) {
+	                    // Link the nodes with the same rank if the current result node already has the same rank
+	                    curr = this.link(counterHeapOne, curr);
+	                } else {
+	                    // Append the node from the first heap to the linked list
+	                    if (curr.rank != -1) {
+	                        setup.next = curr;
+	                        setup = setup.next;
+	                        curr = new HeapNode(); // Reset the current result node
+	                    }
+	                    setup.next = counterHeapOne;
+	                    setup = setup.next;
+	                }
+	                counterHeapOne = counterHeapOne.next; // Move to the next node in the first heap
+	                if (counterHeapOne.rank == this.last.next.rank) {
+	                    finishedOne = true; // Mark the first heap as finished if reached the last node
+	                }
+	            } else {
+	                // Merge nodes when the rank of the node from the second heap is lower
+	                if (curr.rank == counterHeapTwo.rank) {
+	                    // Link the nodes with the same rank if the current result node already has the same rank
+	                    curr = this.link(counterHeapTwo, curr);
+	                } else {
+	                    // Append the node from the second heap to the linked list
+	                    if (curr.rank != -1) {
+	                        setup.next = curr;
+	                        setup = setup.next;
+	                        curr = new HeapNode(); // Reset the current result node
+	                    }
+	                    setup.next = counterHeapTwo;
+	                    setup = setup.next;
+	                }
+	                counterHeapTwo = counterHeapTwo.next; // Move to the next node in the second heap
+	                if (counterHeapTwo.rank == heap2.last.next.rank) {
+	                    finishedTwo = true; // Mark the second heap as finished if reached the last node
+	                }
+	            }
+	        }
 
-			}
-			if (counterHeapOne.rank == this.last.next.rank) {
-				finishedOne = true;
-			} else if (counterHeapTwo.rank == heap2.last.next.rank) {
-				fibishedTwo = true;
-			}
-
-		}
-		if (curr != null) {
-			setup.next = curr;
-			setup = setup.next;
-		}
-		setup.next = point.next;
-		point.next = null;
-		this.last = setup;
-
+	        // Check if there is any node left in the merging process and update the pointers accordingly
+	        if (curr.rank != -1) {
+	            setup.next = curr;
+	            setup = setup.next;
+	        }
+	        setup.next = point.next;
+	        point.next = null;
+	        this.last = setup;
+	    }
 	}
 
-
-			
-
-		
-
-	
+	/**
+	 * Links two heap nodes together and returns the parent node.
+	 * 
+	 * @param x The first heap node.
+	 * @param y The second heap node.
+	 * @return The parent node after linking.
+	 */
 	public HeapNode link(HeapNode x, HeapNode y) {
-		if (x.item.key > y.item.key) {
-			return link(y, x);
-		}
-		if (x.child == null) {
-			y.next = y;
-		}
-		else {
-			y.next = x.child.next;
-			y.parent = x;
-			x.child.next = y;
-		}
-		x.child = y;
-		x.rank += 1;
-		return x;
+	    // Ensure x has smaller key than y
+	    if (x.item.key > y.item.key) {
+	        return link(y, x);
+	    }
+	    // Link y as a child of x
+	    if (x.child == null) {
+	        y.next = y;
+	    } else {
+	        y.next = x.child.next;
+	        x.child.next = y;
+	    }
+	    // Update parent, child, and rank
+	    y.parent = x;
+	    x.child = y;
+	    x.rank += 1;
+	    return x;
 	}
+
 		
 	/**
 	 * 
@@ -193,7 +234,17 @@ public class BinomialHeap {
 	 * 
 	 */
 	public int numTrees() {
-		return 0; // should be replaced by student code
+		if (size == 0) {
+			return 0;
+		}
+		int counter = 1;
+		HeapNode stop_node = this.last.next;
+		HeapNode node = this.last.next.next;
+		while (node != stop_node) {
+			counter += 1;
+			node = node.next;
+		}
+		return counter;
 	}
 
 
