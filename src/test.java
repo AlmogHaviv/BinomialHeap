@@ -4,16 +4,17 @@ package src;
 public class test {
 
     public static void main(String[] args) {
-        testInsert();
-        testDeleteMin();
-        testFindMin();
-        testDeleteMin2();
-        //testDecreaseKey();
-        //testDelete();
-        testMeld();
-        testSize();
-        testEmpty();
-        testNumTrees();
+       testInsert();
+       testDeleteMin();
+       testFindMin();
+       testDeleteMin2();
+       testDecreaseKey();
+       testDelete();
+       testMeld();
+       testSize();
+       testEmpty();
+       testNumTrees();
+       deleteEdgeCaseSameKey();
     }
 
     public static void testInsert() {
@@ -189,7 +190,29 @@ public class test {
         heap.insert(5, "Info 5");
         heap.insert(20, "Info 20");
 
-        heap.decreaseKey(item, 3);
+        heap.decreaseKey(item, 7);
+        
+        if (heap.min.item.key == 3) {
+        	System.out.println("testDecreaseKey min.item.key passed.");
+        }
+        else {
+        	System.out.println("testDecreaseKey min.item.key faild.");
+        }
+        
+        if (heap.last.item.key == 3) {
+        	System.out.println("testDecreaseKey last.item.key passed.");
+        }
+        else {
+        	System.out.println("testDecreaseKey last.item.key faild.");
+        }
+        
+        if (heap.last.child.item.key == 5) {
+        	System.out.println("testDecreaseKey last.child.item.key passed.");
+        }
+        else {
+        	System.out.println("testDecreaseKey last.child.item.key faild.");
+        }
+
 
         System.out.println("DecreaseKey test passed.");
     }
@@ -201,6 +224,13 @@ public class test {
         heap.insert(20, "Info 20");
 
         heap.delete(item);
+        
+        if (heap.last.child.item.key == 20) {
+        	System.out.println("testDelete last.child passed.");
+        }
+        else {
+        	System.out.println("testDelete last.child faild.");
+        }
 
         System.out.println("Delete test passed.");
     }
@@ -285,5 +315,36 @@ public class test {
         System.out.println("Number of trees in heap: " + heap.numTrees());
         System.out.println("Number of trees in heap: " + (heap.numTrees() == 2));
         System.out.println("NumTrees test passed.");
+    }
+    
+    public static void deleteEdgeCaseSameKey() {
+        BinomialHeap heap = new BinomialHeap();
+        heap.insert(1, "1");
+        heap.insert(1, "34");
+        heap.insert(20, "Info 20");
+        heap.insert(42, "Info 42");
+        
+        heap.deleteMin();
+        
+        heap.printHeap();
+        
+        if (heap.min.item.key == 1) {
+        	System.out.println("deleteEdgeCaseSameKey heap.min.item.key passed.");
+        }
+        else {
+        	System.out.println("deleteEdgeCaseSameKey heap.min.item.key faild.");
+        }
+        if (heap.last.item.key == 20) {
+        	System.out.println("deleteEdgeCaseSameKey heap.last.item.key passed.");
+        }
+        else {
+        	System.out.println("deleteEdgeCaseSameKey heap.last.item.key faild.");
+        }
+        if (heap.last.next.item.key == 1) {
+        	System.out.println("deleteEdgeCaseSameKey heap.last.next.item.key passed.");
+        }
+        else {
+        	System.out.println("deleteEdgeCaseSameKey heap.last.next.item.key faild.");
+        }
     }
 }
