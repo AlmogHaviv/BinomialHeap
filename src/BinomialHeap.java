@@ -6,6 +6,7 @@ package src;
  * An implementation of binomial heap over non-negative integers.
  * Based on exercise from previous semester.
  * TODO - might need to deal with empty list deleteMin (?)
+ * TODO - delete extra variables
  */
 public class BinomialHeap {
 	public int size;
@@ -67,6 +68,9 @@ public class BinomialHeap {
 	 */
 	public void deleteMin() {
 		this.deletedRanks += this.min.rank;
+		if (this.size == 0) {
+			return;
+		}
 		if (this.size == 1) {
 			this.size = 0;
 			this.last = new HeapNode();
