@@ -1,4 +1,4 @@
-package src;
+
 
 
 public class test {
@@ -15,6 +15,43 @@ public class test {
        testEmpty();
        testNumTrees();
        deleteEdgeCaseSameKey();
+       testmoms();
+    }
+    public static void testmoms(){
+        BinomialHeap heap = new BinomialHeap();
+        heap.insert(10, "Info 10");
+        heap.insert(5, "Info 5");
+        heap.insert(20, "Info 20");
+        heap.insert(1, "Info 1");
+        heap.insert(7, "Info 7");
+        heap.insert(4, "Info 4");
+        heap.insert(42, "Info 42");
+        heap.insert(3, "Info 3");
+        heap.insert(800, "Info 800");
+        heap.insert(18, "Info 18");
+        heap.insert(100, "Info 100");
+        
+        if (heap.last.child.next.parent.item.key == 1) {
+            System.out.println("testmoms heap.last.child.next.parent passed.");
+        }
+        else {
+            System.out.println("testmoms heap.last.child.next.parent faild.");
+        }
+        
+        if (heap.last.next.next.child.parent.item.key == 18) {
+            System.out.println("testmoms heap.last.next.next.child.parent passed.");
+        }
+        else {
+            System.out.println(" moms heap.last.next.next.child.parent faild.");
+        }
+
+        if (heap.last.child.child.next.parent.item.key == 3) {
+            System.out.println("testmoms heap.last.child.child.next.parent passed.");
+        }
+        else {
+            System.out.println("testmoms heap.last.child.child.next.parent faild.");
+        }
+        
     }
 
     public static void testInsert() {

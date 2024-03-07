@@ -1,26 +1,26 @@
-package src;
+//username1 - tal9
+//id1      - 322539651
+//name1    - Tal Cohen
+//username2 - almoghaviv
+//id2      - 207298720
+//name2    - Almog Haviv
 
 /**
  * BinomialHeap
  *
  * An implementation of binomial heap over non-negative integers.
  * Based on exercise from previous semester.
- * TODO - might need to deal with empty list deleteMin (?)
  * TODO - delete extra variables
  */
 public class BinomialHeap {
 	public int size;
 	public HeapNode last;
 	public HeapNode min;
-	public int linkcounter;
-	public int deletedRanks;
 
-	public BinomialHeap() {
-		this.size = 0;
-		this.linkcounter = 0;
-		this.deletedRanks = 0;
+	public BinomialHeap() { // Constructor for creating a new Binomial Heap, O(1) time complexity
+		this.size = 0; // Initialize the size of the heap to 0
 	}
-	
+
 	/**
 	 * Function for insert one new node
 	 *
@@ -28,7 +28,7 @@ public class BinomialHeap {
 	 * @param info Additional information to be stored in the new HeapItem.
 	 *
 	 */
-	public BinomialHeap BinomialHeapForInsert(HeapNode node) {
+	public BinomialHeap BinomialHeapForInsert(HeapNode node) { //O(1) time complexity
 		BinomialHeap heap2 = new BinomialHeap();
 		heap2.size = 1;
 		heap2.last = node;
@@ -45,7 +45,7 @@ public class BinomialHeap {
 	 * @param info Additional information to be stored in the new HeapItem.
 	 * @return The newly generated HeapItem.
 	 */
-	public HeapItem insert(int key, String info) {
+	public HeapItem insert(int key, String info) { //O(log(n)) time complexity
 		
 		// Create a new HeapNode with the provided key and info
 		HeapNode nodeInsert = new HeapNode(key, info);
@@ -66,11 +66,12 @@ public class BinomialHeap {
 	 * Delete the minimal item from the binomial heap.
 	 * This method removes the node with the minimum key value from the heap.
 	 */
-	public void deleteMin() {
-		this.deletedRanks += this.min.rank;
+	public void deleteMin() { //O(log(n)) time complexity
+		// If the heap is empty, do nothing
 		if (this.size == 0) {
 			return;
 		}
+		// If the heap size is 1, then after delete min the heap is empty
 		if (this.size == 1) {
 			this.size = 0;
 			this.last = new HeapNode();
@@ -125,7 +126,7 @@ public class BinomialHeap {
 	 * It updates the minimum node and adjusts the size of the heap accordingly.
 	 * it does not return anything, it is doing it in-place.
 	 */
-	private void removeMin() {
+	private void removeMin() { //O(log(n)) time complexity
 	    // Get the current minimum node
 	    HeapNode oldMin = this.min;
 	    // Find the next node in the circular linked list
@@ -164,7 +165,7 @@ public class BinomialHeap {
 	/**
 	 * Return the minimal HeapItem
 	 */
-	public HeapItem findMin() {
+	public HeapItem findMin() { //O(1) time complexity
 		return this.min.item;
 	}
 
@@ -175,7 +176,7 @@ public class BinomialHeap {
 	 * @param item The HeapItem whose key is to be decreased.
 	 * @param diff The amount by which to decrease the key (0 < diff < item.key).
 	 */
-	public void decreaseKey(HeapItem item, int diff) {
+	public void decreaseKey(HeapItem item, int diff) { //O(log(n)) time complexity
 	    HeapNode node = item.node; // Get the node associated with the HeapItem
 	    item.key -= diff; // Decrease the key by the specified difference
 
@@ -200,7 +201,7 @@ public class BinomialHeap {
 	 * 
 	 * @param item The item to be deleted from the heap.
 	 */
-	public void delete(HeapItem item) {
+	public void delete(HeapItem item) { //O(log(n)) time complexity
 	    // Calculate the difference between the item's key and 1
 	    int n = item.key - 1;
 	    // Decrease the key of the item by n
@@ -215,7 +216,7 @@ public class BinomialHeap {
 	 * 
 	 * @param heap2 The heap to be melded with the current heap.
 	 */
-	public void meld(BinomialHeap heap2) {
+	public void meld(BinomialHeap heap2) { //O(log(n)) time complexity
 	    // If both heaps are empty, no merging is needed
 	    if (this.empty() && heap2.empty()) {
 	        return;
@@ -327,17 +328,15 @@ public class BinomialHeap {
 	
 	/**
 	 * Links two heap nodes together and returns the parent node.
-	 * 
 	 * @param x The first heap node.
 	 * @param y The second heap node.
 	 * @return The parent node after linking.
 	 */
-	public HeapNode link(HeapNode x, HeapNode y) {
+	public HeapNode link(HeapNode x, HeapNode y) { //O(1) time complexity
 	    // Ensure x has smaller key than y
 	    if (x.item.key > y.item.key) {
 	        return link(y, x);
 	    }
-	    this.linkcounter += 1;
 	    // Link y as a child of x
 	    if (x.child == null) {
 	        y.next = y;
@@ -358,8 +357,8 @@ public class BinomialHeap {
 	 * Return the number of elements in the heap
 	 *   
 	 */
-	public int size() {
-		return this.size; // should be replaced by student code
+	public int size() { //O(1) time complexity
+		return this.size;
 	}
 
 	/**
@@ -368,8 +367,8 @@ public class BinomialHeap {
 	 * is empty.
 	 *   
 	 */
-	public boolean empty() {
-		return this.size == 0; // should be replaced by student code
+	public boolean empty() { //O(1) time complexity
+		return this.size == 0;
 	}
 
 	/**
@@ -377,21 +376,31 @@ public class BinomialHeap {
 	 * Return the number of trees in the heap.
 	 * 
 	 */
-	public int numTrees() {
+	public int numTrees() { //O(log(n)) time complexity
+		// If the heap is empty, return 0 trees
 		if (size == 0) {
 			return 0;
 		}
+		// initializing counter for nuber of trees
 		int counter = 1;
+
+		// Store the stop node to mark the end of traversal
 		HeapNode stop_node = this.last.next;
+
+		// Start traversal from the second node
 		HeapNode node = this.last.next.next;
+
+		// Traverse through the nodes until reaching the stop node
 		while (node != stop_node) {
-			counter += 1;
-			node = node.next;
+			counter += 1; // Increment counter for each tree encountered
+			node = node.next; // Move to the next node
 		}
+		// Return the total count of trees in the heap
 		return counter;
 	}
-	
-	
+
+// deleteeeeeeeeefdlvknakfvbievfbi!!!!!!! after tests
+
 	/**
 	 * Prints the entire binomial heap, including all trees.
 	 * If the heap is empty, prints a corresponding message.
@@ -449,7 +458,7 @@ public class BinomialHeap {
 	 * Class implementing a node in a Binomial Heap.
 	 *  
 	 */
-	public class HeapNode{
+	public class HeapNode{ //O(1)
 		public HeapItem item;
 		public HeapNode child;
 		public HeapNode next;
@@ -484,7 +493,7 @@ public class BinomialHeap {
 	 * Class implementing an item in a Binomial Heap.
 	 *  
 	 */
-	public class HeapItem{
+	public class HeapItem{ //O(1)
 		public HeapNode node;
 		public int key;
 		public String info;
