@@ -1,9 +1,11 @@
 
+import java.util.*;
 
 
 public class test {
 
     public static void main(String[] args) {
+        Tal();
        testInsert();
        testDeleteMin();
        testFindMin();
@@ -16,6 +18,7 @@ public class test {
        testNumTrees();
        deleteEdgeCaseSameKey();
        testmoms();
+       emptyHeaps();
     }
     public static void testmoms(){
         BinomialHeap heap = new BinomialHeap();
@@ -384,4 +387,45 @@ public class test {
         	System.out.println("deleteEdgeCaseSameKey heap.last.next.item.key faild.");
         }
     }
+    public static void Tal() {
+        BinomialHeap binomialHeap = new BinomialHeap();
+        Random random = new Random();
+
+        // Insert 100 items with keys 1-100 in random order
+        List<Integer> keys = new ArrayList<>();
+        for (int i = 1; i <= 10000; i++) {
+            keys.add(i);
+        }
+        Collections.shuffle(keys);
+        for (int key : keys) {
+            String value = "Value for key " + key;
+            binomialHeap.insert(key, value);
+        }
+        System.out.println("Minimum after insertions " + 10000 + ": " + binomialHeap.findMin().key);
+        System.out.println("Size after insertions " + 10000 + ": " + binomialHeap.size());
+
+        // Delete the min 100 times and print the min after each deletion
+        for (int i = 0; i < 10000; i++) {
+            binomialHeap.deleteMin();
+//            System.out.println("Minimum after deletion " + (i + 1) + ": " + binomialHeap.findMin().key);
+//            System.out.println("Size after deletion " + (i + 1) + ": " + binomialHeap.size());
+
+        }
+//        binomialHeap.deleteMin();
+        System.out.println("Minimum after deletion " + 10000 + ": " + binomialHeap.findMin());
+        System.out.println("Size after deletion " + 10000 + ": " + binomialHeap.size());
+    }
+    public static void emptyHeaps(){
+        BinomialHeap heap1 = new BinomialHeap();
+        BinomialHeap heap2 = new BinomialHeap();
+        heap1.meld(heap2);
+        boolean n = heap1.size() == 0;
+        System.out.println("test empty meld: " + n);
+        heap1.printHeap();
+        boolean m = heap1.numTrees() == 0;
+        System.out.println("test empty meld: " + m);
+        boolean l = heap1.findMin() == null;
+        System.out.println("test empty meld: " + l);
+    }
+
 }

@@ -10,7 +10,6 @@
  *
  * An implementation of binomial heap over non-negative integers.
  * Based on exercise from previous semester.
- * TODO - delete extra variables
  */
 public class BinomialHeap {
 	public int size;
@@ -52,7 +51,6 @@ public class BinomialHeap {
 		
 		// Creating a heap
 		BinomialHeap heap2 = BinomialHeapForInsert(nodeInsert);
-		
 
 		// Meld the new heap (heap2) with the current heap
 		this.meld(heap2);
@@ -166,6 +164,9 @@ public class BinomialHeap {
 	 * Return the minimal HeapItem
 	 */
 	public HeapItem findMin() { //O(1) time complexity
+		if (this.size == 0){
+			return null;
+		}
 		return this.min.item;
 	}
 
@@ -202,8 +203,7 @@ public class BinomialHeap {
 	 * @param item The item to be deleted from the heap.
 	 */
 	public void delete(HeapItem item) { //O(log(n)) time complexity
-	    // Calculate the difference between the item's key and 1
-	    int n = item.key - 1;
+	    int n = item.key + 1;
 	    // Decrease the key of the item by n
 	    this.decreaseKey(item, n);
 	    // Delete the minimum item from the heap
@@ -399,61 +399,6 @@ public class BinomialHeap {
 		return counter;
 	}
 
-// deleteeeeeeeeefdlvknakfvbievfbi!!!!!!! after tests
-
-	/**
-	 * Prints the entire binomial heap, including all trees.
-	 * If the heap is empty, prints a corresponding message.
-	 */
-	public void printHeap() {
-	    if (empty()) {
-	        System.out.println("Heap is empty");
-	        return;
-	    }
-	    System.out.println("Binomial Heap:");
-	    HeapNode currentRoot = last;
-	    HeapNode stopNode = last.next; // Stop condition for circular list of roots
-	    boolean stop = false;
-
-	    // Iterate through all roots and print each tree
-	    do {
-	        System.out.println("Root: " + currentRoot.item.key);
-	        printTree(currentRoot, 0, currentRoot); // Print the tree rooted at current root
-	        currentRoot = currentRoot.next;
-	        if (currentRoot == stopNode) {
-	            stop = true; // We've visited all roots
-	        }
-	    } while (!stop);
-	}
-
-	/**
-	 * Prints the tree rooted at the given node recursively.
-	 * 
-	 * @param node         The root node of the tree to be printed.
-	 * @param depth        The current depth in the tree (used for indentation).
-	 * @param initialRoot  The initial root node of the tree.
-	 */
-	private void printTree(HeapNode node, int depth, HeapNode initialRoot) {
-	    StringBuilder sb = new StringBuilder();
-	    for (int i = 0; i < depth; i++) {
-	        sb.append("  "); // Adjust spacing for depth
-	    }
-	    sb.append(node.item.key).append(" [").append(node.rank).append("]");
-
-	    System.out.println(sb.toString());
-
-	    // Print child recursively if exists
-	    if (node.child != null) {
-	        printTree(node.child, depth + 1, node.child);
-	    }
-
-	    // Print sibling recursively until we reach the initial root
-	    if (node.next != node.parent && node.next != null && node.next != initialRoot) {
-	        printTree(node.next, depth, initialRoot);
-	    }
-	}
-
-	
 	/**
 	 * Class implementing a node in a Binomial Heap.
 	 *  
