@@ -393,7 +393,7 @@ public class test {
 
         // Insert 100 items with keys 1-100 in random order
         List<Integer> keys = new ArrayList<>();
-        for (int i = 1; i <= 10000; i++) {
+        for (int i = 2; i <= 10001; i++) {
             keys.add(i);
         }
         Collections.shuffle(keys);
