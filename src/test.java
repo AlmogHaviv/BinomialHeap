@@ -142,7 +142,7 @@ public class test {
         heap.insert(800, "Info 800");
         heap.insert(18, "Info 18");
         heap.insert(100, "Info 100");
-        heap.printHeap();
+
         
         
         if (heap.min.next.item.key == 100) {
@@ -153,7 +153,7 @@ public class test {
         }
 
         heap.deleteMin();
-        heap.printHeap();
+
         if (heap.min.item.key == 3) {
         	System.out.println("DeleteMin2 min passed.");
         }
@@ -366,7 +366,7 @@ public class test {
         
         heap.deleteMin();
         
-        heap.printHeap();
+
         
         if (heap.min.item.key == 1) {
         	System.out.println("deleteEdgeCaseSameKey heap.min.item.key passed.");
@@ -421,7 +421,7 @@ public class test {
         heap1.meld(heap2);
         boolean n = heap1.size() == 0;
         System.out.println("test empty meld: " + n);
-        heap1.printHeap();
+
         boolean m = heap1.numTrees() == 0;
         System.out.println("test empty meld: " + m);
         boolean l = heap1.findMin() == null;
